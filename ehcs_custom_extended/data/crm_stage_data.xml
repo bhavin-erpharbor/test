@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="crm.stage" id="stage_lead5">
+        <field name="name">Lost</field>
+        <field name="is_lost">True</field>
+        <field name="fold" eval="False"/>
+        <field name="sequence">5</field>
+    </record>
+
+     <record model="crm.stage" id="stage_lead3">
+        <field name="name">Contact in Future</field>
+        <field name="sequence">3</field>
+    </record>
+
+     <record id="ir_cron_send_email_reminder_lead_activities" model="ir.cron">
+        <field name="name">Email: Reminder lead activities</field>
+        <field name="model_id" ref="crm.model_crm_lead"/>
+        <field name="state">code</field>
+        <field name="code">model.send_email_reminder_lead_activities()</field>
+        <field name="active" eval="True"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="nextcall" eval="(DateTime.now().replace(hour=9, minute=0).strftime('%Y-%m-%d %H:%M:%S'))"/>
+    </record>
+
+    <record id="mail_template_creation_crm_lead_reminder_due_activities" model="mail.template">
+        <field name="name">Email: Reminder for due activities</field>
+        <field name="model_id" ref="crm.model_crm_lead"/>
+        <field name="subject">Due Activities Reminder</field>
+        <field name="email_to">{{ object.partner_user_id.email }}</field>
+        <field name="body_html" type="html">
+            <table border="0" cellpadding="0" cellspacing="0"
+                   style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                <tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                               style="padding: 16px; background-color: #FFFFFF; color: #454748; border-collapse:separate;">
+                            <tbody>
+                                <!-- HEADER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="right">
+                                                    <img t-attf-src="/logo.png?company={{ object.company_id.id }}"
+                                                         style="padding: 0px; margin: 0px; height: auto; width: 80px;"
+                                                         t-att-alt="object.company_id.name"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- CONTENT -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="top" style="font-size: 13px;">
+                                                    <t t-if="object.activity_ids.date_deadline">
+                                                        <span>DUE DATE</span>
+                                                        <br/>
+                                                        <t t-esc="object.activity_ids.date_deadline"/><br/><br/>
+                                                    </t>
+                                                    <t t-if="object.activity_ids.priority">
+                                                        <span>PRIORITY</span>
+                                                        <br/>
+                                                        <t t-esc="object.activity_ids.priority"/><br/><br/>
+                                                    </t>
+                                                    <t t-if="object.partner_id">
+                                                        <span>LEAD</span>
+                                                        <br/>
+                                                        <t t-esc="object.partner_id.name"/><br/><br/>
+                                                    </t>
+                                                    <t t-if="object.email_from">
+                                                        <span>EMAIL</span>
+                                                        <br/>
+                                                        <a t-attf-href="mailto:{{ object.email_from }}"><t t-esc="object.email_from"/></a>
+                                                        <br/><br/>
+                                                    </t>
+                                                     <t t-if="object.phone">
+                                                        <span>PHONE</span>
+                                                        <br/>
+                                                        <t t-esc="object.phone"/>
+                                                     </t>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- FOOTER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="left">
+                                                    Elsner Technologies Pvt. Ltd.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="middle" align="left" style="opacity: 0.7;">
+                                                    +1 (607) 524-4040
+                                                        |
+                                                        sales@elsner.com
+                                                        |
+                                                        https://www.elsner.com
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </field>
+    </record>
+
+
+
+</odoo>

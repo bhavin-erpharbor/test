@@ -1,0 +1,33 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_crm_technology,access.crm.technology,model_crm_technology,base.group_system,1,1,1,1
+access_crm_user_type,access.crm.user.type,model_crm_user_type,,1,1,1,1
+access_sale_order_project_type,access.sale.order.project.type,model_sale_order_project_type,base.group_system,1,1,1,1
+access_sale_stage,access.sale.stage,model_sale_stage,,1,1,1,1
+access_secondary_email,access.secondary.email,model_secondary_email,,1,1,1,1
+
+access_account_account_ba,account_account ba,account.model_account_account,sale_group_ba,1,0,0,0
+access_account_analytic_account_ba,account_analytic_account ba,analytic.model_account_analytic_account,sale_group_ba,1,1,1,0
+access_account_account_tag_sale_ba,account.account.tag.sale.ba,account.model_account_account_tag,sale_group_ba,1,0,0,0
+access_account_invoice_send_ba,access.account.invoice.send.ba,account.model_account_invoice_send,sale_group_ba,1,1,1,0
+access_sale_account_journal,account.journal sale order.ba,account.model_account_journal,sale_group_ba,1,0,0,0
+access_account_move_ba,account_move ba,account.model_account_move,sale_group_ba,1,1,1,1
+access_account_move_line_ba,account_move_line ba,account.model_account_move_line,sale_group_ba,1,1,1,1
+access_account_partial_reconcile_ba,account_partial_reconcile ba,account.model_account_partial_reconcile,sale_group_ba,1,0,0,0
+access_account_payment_term_ba,account_payment_term ba,account.model_account_payment_term,sale_group_ba,1,0,0,0
+access_account_tax_ba,account.tax.ba,account.model_account_tax,sale_group_ba,1,0,0,0
+access_account_tax_group_sale_ba,account.tax.group sale ba,account.model_account_tax_group,sale_group_ba,1,0,0,0
+access_res_partner_sale_ba,res.partner.sale.ba,base.model_res_partner,sale_group_ba,1,0,0,0
+access_product_pricelist_sale_ba,product.pricelist.sale.ba,product.model_product_pricelist,sale_group_ba,1,0,0,0
+access_product_attribute_custom_value_ba,product.attribute.custom value ba,product.model_product_attribute_custom_value,sale_group_ba,1,1,1,1
+access_product_supplierinfo_ba,product.supplierinfo.ba,product.model_product_supplierinfo,sale_group_ba,1,0,0,0
+access_product_product_sale_ba,product.product sale use,product.model_product_product,sale_group_ba,1,0,0,0
+access_product_template_sale_ba,product.template sale use,product.model_product_template,sale_group_ba,1,0,0,0
+access_uom_uom_ba,uom.uom.ba,uom.model_uom_uom,sale_group_ba,1,0,0,0
+access_sale_order,sale.order,model_sale_order,sale_group_ba,1,1,1,1
+access_sale_order_line,sale.order.line,model_sale_order_line,sale_group_ba,1,1,1,1
+access_payment_link_wizard_sale,access.payment.link.wizard.sale,payment.model_payment_link_wizard,sale_group_ba,1,1,1,0
+
+access_sale_advance_payment_inv_ba,access.sale.advance.payment.inv.ba,sale.model_sale_advance_payment_inv,ehcs_custom_extended.sale_group_ba,1,1,1,0
+access_sale_order_cancel_ba,access.sale.order.cancel.ba,sale.model_sale_order_cancel,ehcs_custom_extended.sale_group_ba,1,1,1,0
+
+

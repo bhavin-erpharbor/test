@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="crm_lead_view_form_customer" model="ir.ui.view">
+            <field name="name">crm.lead.form</field>
+            <field name="model">crm.lead</field>
+            <field name="arch" type="xml">
+                <form class="o_lead_opportunity_form" js_class="crm_form">
+                    <header>
+                        <field name="stage_id" widget="statusbar" class="o_field_statusbar"/>
+                    </header>
+                    <sheet>
+                        <field name="active" invisible="1"/>
+                        <field name="company_id" invisible="1"/>
+                        <widget name="web_ribbon" title="Lost" bg_color="bg-danger" attrs="{'invisible': ['|', ('probability', '&gt;', 0), ('active', '=', True)]}"/>
+                        <widget name="web_ribbon" title="Won" attrs="{'invisible': [('probability', '&lt;', 100)]}" />
+                        <div class="oe_title">
+                            <h1><field class="text-break" name="name" placeholder="e.g. Product Pricing *"/></h1>
+                            <h2 class="d-flex gap-2 g-0 align-items-end pb-3">
+                                <div>
+                                    <div class="oe_edit_only d-md-flex align-items-center">
+                                        <label for="probability"/>
+                                        <div class="d-flex align-items-center">
+                                            <button class="ps-0 ps-md-2 btn btn-link" name="action_set_automated_probability" type="object"
+                                                    attrs="{'invisible': [('is_automated_probability', '=', True)]}">
+                                                <i class="fa fa-gear" role="img" title="Switch to automatic probability" aria-label="Switch to automatic probability"></i>
+                                            </button>
+                                            <small class="oe_grey h6 mb0 d-flex" attrs="{'invisible': [('is_automated_probability', '=', True)]}">
+                                                <field class="mb0" name="automated_probability" force_save="1"/> %
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div id="probability" class="d-inline-block">
+                                        <field name="is_automated_probability" invisible="1"/>
+                                        <field name="probability" widget="float" class="oe_inline o_input_6ch"/>
+                                        <span class="oe_grey"> %</span>
+                                    </div>
+                                </div>
+                            </h2>
+                        </div>
+                        <group>
+                            <group name="lead_partner">
+                                <!-- Preload all the partner's information -->
+                                <field name="is_partner_visible" invisible='1'/>
+                                <field name="partner_name"/>
+                                <field name="partner_user_id"/>
+                                <label for="street" string="Address"/>
+                                <div class="o_address_format">
+                                    <field name="street" placeholder="Street..." class="o_address_street"/>
+                                    <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                    <field name="city" placeholder="City" class="o_address_city"/>
+                                    <field name="state_id" class="o_address_state" placeholder="State" options='{"no_open": True}'/>
+                                    <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                    <field name="country_id" placeholder="Country *" required="1" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
+                                </div>
+                                <field name="website" widget="url" placeholder="e.g. https://www.odoo.com"/>
+                                <field name="lang_active_count" invisible="1"/>
+                                <field name="lang_code" invisible="1"/>
+                                <field name="lang_id" attrs="{'invisible': [('lang_active_count', '&lt;=', 1)]}"
+                                    options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                            </group>
+                                <field name="mobile_blacklisted" invisible="1"/>
+                                <field name="user_company_ids" invisible="1"/>
+                            <group name="lead_info">
+                                <label for="contact_name"/>
+                                <div class="o_row">
+                                    <field name="contact_name" required="1" string="Contact Name *"/>
+                                    <field name="title" placeholder="Title" domain="[]" options='{"no_open": True}'/>
+                                </div>
+                                <field name="is_blacklisted" invisible="1"/>
+                                <field name="phone_blacklisted" invisible="1"/>
+                                <field name="email_state" invisible="1"/>
+                                <field name="phone_state" invisible="1"/>
+                                <field name="partner_email_update" invisible="1"/>
+                                <field name="partner_phone_update" invisible="1"/>
+                                <label for="email_from_group_lead_info" class="oe_inline"/>
+                                <div class="o_row o_row_readonly">
+                                    <button name="mail_action_blacklist_remove" class="fa fa-ban text-danger"
+                                        title="This email is blacklisted for mass mailings. Click to unblacklist."
+                                        type="object" context="{'default_email': email_from}" groups="base.group_user"
+                                        attrs="{'invisible': [('is_blacklisted', '=', False)]}"/>
+                                    <field name="email_from" id="email_from_group_lead_info" string="Email *" required="1" widget="email"/>
+                                    <span class="fa fa-exclamation-triangle text-warning oe_edit_only"
+                                        title="By saving this change, the customer email will also be updated."
+                                        attrs="{'invisible': [('partner_email_update', '=', False)]}"/>
+                                </div>
+                                <field name="email_cc" groups="base.group_no_one"/>
+                                <field name="function"/>
+                                <label for="phone_group_lead_info" class="oe_inline"/>
+                                <div class="o_row o_row_readonly">
+                                    <button name="phone_action_blacklist_remove" class="fa fa-ban text-danger"
+                                        title="This phone number is blacklisted for SMS Marketing. Click to unblacklist."
+                                        type="object" context="{'default_phone': phone}" groups="base.group_user"
+                                        attrs="{'invisible': [('phone_blacklisted', '=', False)]}"/>
+                                    <field name="phone" id="phone_group_lead_info" widget="phone"/>
+                                    <span class="fa fa-exclamation-triangle text-warning oe_edit_only"
+                                        title="By saving this change, the customer phone number will also be updated."
+                                        attrs="{'invisible': [('partner_phone_update', '=', False)]}"/>
+                                </div>
+                                <label for="mobile" class="oe_inline"/>
+                                <div class="o_row o_row_readonly">
+                                    <button name="phone_action_blacklist_remove" class="fa fa-ban text-danger"
+                                        title="This phone number is blacklisted for SMS Marketing. Click to unblacklist."
+                                        type="object" context="{'default_phone': mobile}" groups="base.group_user"
+                                        attrs="{'invisible': [('mobile_blacklisted', '=', False)]}"/>
+                                    <field name="mobile" widget="phone" string="Mobile"/>
+                                </div>
+                            </group>
+                            <field name="type" invisible="1"/>
+                            <group>
+                                <field name="user_id"
+                                    context="{'default_sales_team_id': team_id}" widget="many2one_avatar_user"/>
+                                <field name="team_id" options="{'no_open': True, 'no_create': True}"/>
+                                <field name="user_type_id"/>
+                                <field name="technology_id"/>
+                            </group>
+                            <group name="lead_priority" >
+                                <field name="priority" widget="priority"/>
+                                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                                <field name="source_id" required="1"/>
+                                 <field name="company_id"
+                                            groups="base.group_multi_company"
+                                            options="{'no_create': True}"/>
+                            </group>
+                        </group>
+                        <field attrs="{'invisible': [('team_id', '=', False)]}"
+                            name="lead_properties" nolabel="1" columns="2" hideKanbanOption="1"/>
+                        <notebook>
+                            <page string="Internal Notes" name="internal_notes">
+                                <field name="description" placeholder="Add a description..." options="{'collaborative': true}" />
+                            </page>
+                            <page name="extra" string="Extra Info" >
+                                <group>
+                                    <group string="Email" groups="base.group_no_one">
+                                        <field name="message_bounce" readonly="1"/>
+                                    </group>
+                                    <group string="Marketing" name="categorization">
+                                        <field name="campaign_id" options="{'create_name_field': 'title', 'always_reload': True}"/>
+                                        <field name="medium_id"/>
+                                        <field name="referred"/>
+                                    </group>
+                                    <group string="Analysis">
+                                        <field name="date_open"/>
+                                        <field name="date_closed"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids" options="{'post_refresh': 'recipients'}"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+     <record id="crm_case_tree_view_leads_customer" model="ir.ui.view">
+            <field name="name">crm.lead.tree.lead</field>
+            <field name="model">crm.lead</field>
+            <field name="priority">10</field>
+            <field name="arch" type="xml">
+                <tree string="Leads" sample="1" multi_edit="1">
+                    <field name="company_id" invisible="1"/>
+                    <field name="user_company_ids" invisible="1"/>
+                    <field name="date_deadline" invisible="1"/>
+                    <field name="create_date" optional="hide"/>
+                    <field name="name" string="Lead" readonly="1"/>
+                    <field name="contact_name" optional="hide"/>
+                    <field name="partner_name" optional="hide"/>
+                    <field name="email_from" optional="show"/>
+                    <field name="phone" optional="show" class="o_force_ltr"/>
+                    <field name="company_id" groups="base.group_multi_company" optional="show"/>
+                    <field name="city" optional="show"/>
+                    <field name="state_id" optional="hide"/>
+                    <field name="country_id" optional="show" options="{'no_open': True, 'no_create': True}"/>
+                    <field name="partner_id" invisible="1"/>
+                    <!-- Explicit domain due to multi edit -> real company domain would be complicated -->
+                    <field name="user_id" optional="show"  widget="many2one_avatar_user"
+                        domain="[('share', '=', False)]"/>
+                    <field name="team_id" optional="show"/>
+                    <field name="active" invisible="1"/>
+                    <field name="campaign_id" optional="hide"/>
+                    <field name="referred" invisible="1"/>
+                    <field name="medium_id" optional="hide"/>
+                    <field name="source_id" optional="hide"/>
+                    <field name="probability" string="Probability (%)" optional="hide"/>
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="tag_ids" optional="hide" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                    <field name="priority" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+    <record model="ir.actions.act_window" id="crm_lead_all_leads_action">
+            <field name="name">Partner Leads</field>
+            <field name="res_model">crm.lead</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('type','=','opportunity')]</field>
+            <field name="context">{
+                    'default_type': 'opportunity',
+            }</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a Lead
+                </p><p>
+                    Leads are the qualification step before the creation of an opportunity.
+                </p>
+            </field>
+        </record>
+    <record id="crm_lead_all_leads_view_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="crm_case_tree_view_leads_customer"/>
+            <field name="act_window_id" ref="crm_lead_all_leads_action"/>
+        </record>
+
+        <record id="crm_lead_all_leads_view_form" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="crm_lead_view_form_customer"/>
+            <field name="act_window_id" ref="crm_lead_all_leads_action"/>
+        </record>
+
+    <menuitem
+        id="main_crm_menu_leads"
+        name="Partner Leads"
+        parent="crm.crm_menu_root"
+        action="crm_lead_all_leads_action"
+        groups="group_partner_user"
+        sequence="4"/>
+
+    <record model="ir.ui.view" id="crm_lead_view_inherit_form">
+        <field name="name">crm.lead.form.view.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group/group[4]/field[@name='user_id']" position="after">
+                <field name="partner_user_id"/>
+            </xpath>
+
+             <xpath expr="//header//button[@name='action_set_won_rainbowman']" position="attributes">
+                <attribute name="groups">!ehcs_commission.group_partner_user</attribute>
+            </xpath>
+
+            <xpath expr="//header//button[@name='iap_enrich'][1]" position="attributes">
+                <attribute name="groups">!ehcs_commission.group_partner_user</attribute>
+            </xpath>
+
+            <xpath expr="//header//button[@name='iap_enrich'][2]" position="attributes">
+                <attribute name="groups">!ehcs_commission.group_partner_user</attribute>
+            </xpath>
+
+            <xpath expr="//header//button[@name='%(crm.crm_lead_lost_action)d']" position="attributes">
+                <attribute name="groups">!ehcs_commission.group_partner_user</attribute>
+            </xpath>
+
+            <xpath expr="//header//button[@name='action_sale_quotations_new']" position="attributes">
+                <attribute name="groups">!ehcs_commission.group_partner_user</attribute>
+            </xpath>
+
+
+        </field>
+    </record>
+
+     <record id="crm.crm_lead_action_pipeline_view_kanban" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="crm.crm_case_kanban_view_leads"/>
+        <field name="act_window_id" ref="crm.crm_lead_action_pipeline"/>
+     </record>
+
+     <record model="ir.actions.act_window" id="crm.crm_lead_action_pipeline">
+        <field name="context">{
+                'default_type': 'opportunity',
+        }</field>
+     </record>
+
+    <record id="crm.crm_menu_root" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4, ref('group_partner_user'))]"/>
+    </record>
+
+    <record id="crm.crm_menu_sales" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+    </record>
+
+    <record id="crm.res_partner_menu_customer" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4, ref('sales_team.group_sale_manager')), (4, ref('sales_team.group_sale_salesman'))]"/>
+    </record>
+
+</odoo>

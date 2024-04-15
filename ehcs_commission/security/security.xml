@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--    category for new group partner-->
+        <record model="ir.module.category" id="module_category_user_partner">
+            <field name="name">Partner</field>
+            <field name="sequence">7</field>
+        </record>
+
+        <!--    Partner user-->
+        <record id="group_partner_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="module_category_user_partner"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!--    show discuss app-->
+        <record id="group_show_discussion" model="res.groups">
+            <field name="name">Show Discussion App</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>
+
+        <record id="group_show_prospects_menu" model="res.groups">
+            <field name="name">Show Prospects Menu</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>
+
+        <!--    show link tracker app-->
+        <record id="group_show_tracker" model="res.groups">
+            <field name="name">Show Link Tracker App</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>
+
+        <!--    For Lead :User Partner can see only own records-->
+        <record id="crm_lead_own_lead_rule" model="ir.rule">
+            <field name="name">Own Lead</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="domain_force">[('partner_user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_partner_user'))]"/>
+        </record>
+
+        <!--   For Sale: User Partner can see only own records-->
+        <record id="sale_order_own_sale_rule" model="ir.rule">
+            <field name="name">Own Sale</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="domain_force">[('partner_user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_partner_user'))]"/>
+        </record>
+
+        <!--   For Invoice: User Partner can see only own records-->
+        <record id="account_move_own_ao_rule" model="ir.rule">
+            <field name="name">Own Move</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="domain_force">[('partner_user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_partner_user'))]"/>
+        </record>
+
+        <!--   For Commission: User Partner can see only own records-->
+        <record id="commission_own_ao_rule" model="ir.rule">
+            <field name="name">Own Commission</field>
+            <field name="model_id" ref="ehcs_commission.model_commission"/>
+            <field name="domain_force">[('partner_user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_partner_user'))]"/>
+        </record>
+
+        <!--   For Commission Payment: User Partner can see only own records-->
+        <record id="commission_payment_own_ao_rule" model="ir.rule">
+            <field name="name">Own Commission Payment</field>
+            <field name="model_id" ref="ehcs_commission.model_commission_payment"/>
+            <field name="domain_force">[('partner_user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_partner_user'))]"/>
+        </record>
+
+    </data>
+</odoo>

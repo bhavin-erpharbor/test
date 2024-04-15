@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="wiz_commission_transaction_view" model="ir.ui.view">
+        <field name="name">wiz.commission.transaction.view</field>
+        <field name="model">wiz.commission.transaction</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="payout"/>
+                        </group>
+                        <group>
+                            <field name="transaction_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Submit" name="action_submit" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+   <record id="action_wiz_commission_transaction" model="ir.actions.act_window">
+        <field name="name">Commission Transaction</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wiz.commission.transaction</field>
+        <field name="view_mode">form</field>
+    </record>
+
+</odoo>

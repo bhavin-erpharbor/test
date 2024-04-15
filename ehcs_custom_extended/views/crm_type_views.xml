@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="crm_user_type_form" model="ir.ui.view">
+        <field name="name">crm.user.type.form</field>
+        <field name="model">crm.user.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+		            <group>
+	                    <field name="name"/>
+	                </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="crm_user_type_tree" model="ir.ui.view">
+        <field name="name">crm.user.type.tree</field>
+        <field name="model">crm.user.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="crm_user_type_search_view" model="ir.ui.view">
+        <field name="name">crm.user.type.search</field>
+        <field name="model">crm.user.type</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="act_crm_user_type_view" model="ir.actions.act_window">
+        <field name="name">User type</field>
+        <field name="res_model">crm.user.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to add a User Type.
+            </p><p>
+                Manage all User type details.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_elsner_user_type_main"
+              name="User type"
+              action="act_crm_user_type_view"
+              parent="crm.crm_menu_config"
+/>
+</odoo>

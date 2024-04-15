@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="crm_technology_form" model="ir.ui.view">
+        <field name="name">crm.technology.form</field>
+        <field name="model">crm.technology</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+		            <group>
+	                    <field name="name"/>
+                        <field name="commission"/>
+	                </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="crm_technology_tree" model="ir.ui.view">
+        <field name="name">crm.technology.tree</field>
+        <field name="model">crm.technology</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="commission"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="crm_technology_search_view" model="ir.ui.view">
+        <field name="name">crm.technology.search</field>
+        <field name="model">crm.technology</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="commission"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="act_crm_technology_view" model="ir.actions.act_window">
+        <field name="name">Technology</field>
+        <field name="res_model">crm.technology</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to add a Technology.
+            </p><p>
+                Manage all Technology details.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_elsner_technology_main"
+              name="Technology"
+              action="act_crm_technology_view"
+              parent="crm.crm_menu_config"
+              />
+</odoo>

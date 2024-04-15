@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="redirect_link_wizard_form">
+            <field name="name">redirect.link.form</field>
+            <field name="model">redirect.link</field>
+            <field name="arch" type="xml">
+                <form string="Case Studies">
+                    <footer>
+                        <button string="Redirect" name="action_redict_to_link" type="object" class="btn-primary o_mail_send" data-hotkey="q"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_redirect_link_wizard" model="ir.actions.act_window">
+            <field name="name">Case Studies</field>
+            <field name="res_model">redirect.link</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- App menu Case Studies -->
+        <menuitem id="menu_main_case_studies"
+              name="Case Studies"
+              sequence="57"
+              action="action_redirect_link_wizard"
+              groups="group_partner_user"
+        />
+    </data>
+</odoo>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <!-- Salesperson can see only own sale order -->
+    <!-- Update sale 'sale_order_personal_rule' rule -->
+    <function name="write" model="ir.model.data">
+       <function name="search" model="ir.model.data">
+           <value eval="[('module', '=', 'sale'), ('name', '=', 'sale_order_personal_rule')]"/>
+       </function>
+       <value eval="{'noupdate': False}"/>
+    </function>
+    <record id="sale.sale_order_personal_rule" model="ir.rule">
+        <field name="name">Personal Orders</field>
+        <field ref="sale.model_sale_order" name="model_id"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+    </record>
+
+    <!-- Sale: created rule for salesperson own -->
+    <record id="sale_order_saleperson_own_rule" model="ir.rule">
+        <field name="name">Sale salesperson own</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+    </record>
+
+    <!-- Invoicing: created rule for salesperson own -->
+    <!-- Update sale 'account_invoice_rule_see_personal' rule -->
+    <function name="write" model="ir.model.data">
+       <function name="search" model="ir.model.data">
+           <value eval="[('module', '=', 'sale'), ('name', '=', 'account_invoice_rule_see_personal')]"/>
+       </function>
+       <value eval="{'noupdate': False}"/>
+    </function>
+    <record id="sale.account_invoice_rule_see_personal" model="ir.rule">
+        <field name="name">Personal Invoices</field>
+        <field ref="account.model_account_move" name="model_id"/>
+        <field name="domain_force">[('move_type', 'in', ('out_invoice', 'out_refund')), ('invoice_user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+    </record>
+
+    <!-- account_invoice_rule_see_personal -->
+    <record id="account_move_saleperson_own_rule" model="ir.rule">
+        <field name="name">Invoicing salesperson own</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="domain_force">[('invoice_user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+    </record>
+
+    <!-- Invoicing: udpate rule for Billing own -->
+    <!-- Update account 'account_move_see_all' rule -->
+    <function name="write" model="ir.model.data">
+       <function name="search" model="ir.model.data">
+           <value eval="[('module', '=', 'account'), ('name', '=', 'account_move_see_all')]"/>
+       </function>
+       <value eval="{'noupdate': False}"/>
+    </function>
+    <record id="account.account_move_see_all" model="ir.rule">
+        <field name="name">Personal Journal Entries</field>
+        <field ref="account.model_account_move" name="model_id"/>
+        <field name="domain_force">[('invoice_user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('account.group_account_invoice'))]"/>
+    </record>
+
+    <!-- Update account 'account_move_rule_group_readonly' rule -->
+    <function name="write" model="ir.model.data">
+       <function name="search" model="ir.model.data">
+           <value eval="[('module', '=', 'account'), ('name', '=', 'account_move_rule_group_readonly')]"/>
+       </function>
+       <value eval="{'noupdate': False}"/>
+    </function>
+    <record id="account.account_move_rule_group_readonly" model="ir.rule">
+        <field name="name">Readonly Move</field>
+        <field ref="account.model_account_move" name="model_id"/>
+        <field name="domain_force">[('invoice_user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('account.group_account_invoice'))]"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Update account 'account_move_rule_group_invoice' rule -->
+    <function name="write" model="ir.model.data">
+       <function name="search" model="ir.model.data">
+           <value eval="[('module', '=', 'account'), ('name', '=', 'account_move_rule_group_invoice')]"/>
+       </function>
+       <value eval="{'noupdate': False}"/>
+    </function>
+    <record id="account.account_move_rule_group_invoice" model="ir.rule">
+        <field name="name">Readonly Move</field>
+        <field ref="account.model_account_move" name="model_id"/>
+        <field name="domain_force">[('invoice_user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('account.group_account_invoice'))]"/>
+    </record>
+
+    <!-- create account 'group_account_manager' rule -->
+    <record id="account_move_rule_account_manager" model="ir.rule">
+        <field name="name">All Moves</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('account.group_account_manager'))]"/>
+    </record>
+
+    <!-- BA can see only own records -->
+    <!-- BA Group -->
+    <record id="sale_group_ba" model="res.groups">
+        <field name="name">BA: Own Documents Only</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">the BA user will have access to his own data in the sales application.</field>
+    </record>
+
+    <!-- BA Record Rules -->
+    <record id="sale_order_ba_own_rule" model="ir.rule">
+        <field name="name">Sale BA own</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="domain_force">[('team_member_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('ehcs_custom_extended.sale_group_ba'))]"/>
+    </record>
+
+    <record id="account_move_ba_own_rule" model="ir.rule">
+        <field name="name">Invoicing BA own</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="domain_force">[('team_member_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('ehcs_custom_extended.sale_group_ba'))]"/>
+    </record>
+
+</data>
+</odoo>

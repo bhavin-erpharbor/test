@@ -1,0 +1,1193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="0">
+
+    <record id="commission_payout_monthly_mail_template" model="mail.template">
+        <field name="name">Commission : Monthly mail of Commissions</field>
+        <field name="model_id" ref="model_commission_payment"/>
+        <field name="subject">Know your Commission for {{ ctx.get('mail_subject') }}</field>
+        <field name="email_to">{{ object.partner_user_id.email }}</field>
+        <field name="body_html" type="html">
+            <table border="0" cellpadding="0" cellspacing="0"
+                   style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                <tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                               style="padding: 16px; background-color: #FFFFFF; color: #454748; border-collapse:separate;">
+                            <tbody>
+                                <!-- HEADER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="right">
+                                                    <img t-attf-src="/logo.png?company={{ object.company_id.id }}"
+                                                         style="padding: 0px; margin: 0px; height: auto; width: 80px;"
+                                                         t-att-alt="object.company_id.name"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- CONTENT -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="top" style="font-size: 13px;">
+                                                    <div>
+                                                        <p>
+                                                            Dear <t t-out="object.partner_user_id.name"/>,
+                                                            <br/>
+                                                            <div>Congratulations! We have calculated commissions for the
+                                                                month of <t t-out="ctx.get('mail_subject')"/>.
+                                                            </div>
+                                                            <div>Here is the detailed invoice:</div>
+                                                            <t t-set="commission" t-value="ctx.get('commissions')"/>
+                                                            <table style="border: 1px solid;width: 100%;text-align:left;border-collapse: collapse;">
+                                                                <tr>
+                                                                    <td style="border: 1px solid;width: 25%; margin-right:10px;">
+                                                                        Invoice
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; margin-right:10px;">
+                                                                        Customer Name
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; margin-right:10px;">
+                                                                        Invoice Total (excl. tax)
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; margin-right:10px;">
+                                                                        Commission
+                                                                    </td>
+                                                                </tr>
+                                                                <tr t-foreach="commission" t-as="com">
+                                                                    <td style="border: 1px solid;width: 25%; margin-right:10px;">
+                                                                        <t t-out="com['move_id']['name']"/>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; margin-right:10px;">
+                                                                        <t t-out="com['move_id']['partner_id']['name']"/>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; margin-right:10px;">
+                                                                        <t t-out="format_amount(com['move_id']['amount_untaxed'], com['currency_id'])"/>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; margin-right:10px;">
+                                                                        <t t-out="format_amount(com['amount'], com['currency_id'])"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <br/>
+                                                            <br/>
+                                                            <div>We will release payment soon.</div>
+                                                            <div>You can view your invoices and current status from the
+                                                                link below:
+                                                            </div>
+                                                            <a t-att-href="'/web#view_type=list&amp;model=account.move&amp;id=%s&amp;action=account.action_move_out_invoice_type' % object.id"
+                                                               target="_blank" class="btn btn-secondary"
+                                                            >
+                                                                <b>Odoo.elsner.com</b>
+                                                            </a>
+                                                            <div>We are always available in case you have any issues or
+                                                                need support.
+                                                            </div>
+                                                            <br/>
+                                                            <br/>
+
+                                                            Yours Thankfully,
+
+                                                        </p>
+                                                        <br/>
+                                                        Elsner Technologies Pvt. Ltd.
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- FOOTER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="left">
+                                                    Elsner Technologies Pvt. Ltd.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="middle" align="left" style="opacity: 0.7;">
+                                                    +1 (607) 524-4040
+                                                        |
+                                                        sales@elsner.com
+                                                        |
+                                                        https://www.elsner.com
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </field>
+    </record>
+
+    <record id="commission_payout_release_user_mail_template" model="mail.template">
+        <field name="name">Commission Partner: Payout</field>
+        <field name="model_id" ref="model_commission_payment"/>
+        <field name="subject">Your Payout {{object.name}} for {{ ctx.get('mail_subject') }}</field>
+        <field name="email_to">{{ object.partner_user_id.email }}</field>
+        <field name="body_html" type="html">
+            <table border="0" cellpadding="0" cellspacing="0"
+                   style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                <tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                               style="padding: 16px; background-color: #FFFFFF; color: #454748; border-collapse:separate;">
+                            <tbody>
+                                <!-- HEADER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="right">
+                                                    <img t-attf-src="/logo.png?company={{ object.company_id.id }}"
+                                                         style="padding: 0px; margin: 0px; height: auto; width: 80px;"
+                                                         t-att-alt="object.company_id.name"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- CONTENT -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="top" style="font-size: 13px;">
+                                                    <div>
+                                                        <p>
+                                                            Dear <t t-out="object.partner_user_id.name"/>,
+                                                            <br/>
+                                                            <br/>
+                                                            Hope you are doing well.
+                                                            <br/>
+                                                            <br/>
+                                                            <div>Congratulations! We have released the payment for <t
+                                                                    t-out="ctx.get('mail_subject')"/>.
+                                                            </div>
+                                                            <div>Here are the details:</div>
+                                                            <br/>
+                                                            <t t-set="commission_total"
+                                                               t-value="ctx.get('commissions')"/>
+                                                            <t t-set="sum_total_commission"
+                                                               t-value="sum(commission_total.mapped('amount'))"/>
+                                                            <table style="border: 1px solid;width: 100%;text-align:center;border-collapse: collapse;">
+                                                                <tr>
+                                                                    <td style="border: 1px solid;width: 25%; text-align:left;">
+                                                                        <b>Invoice</b>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; text-align:left;">
+                                                                        <b>Customer Name</b>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; text-align:left;">
+                                                                        <b>Invoice Total (excl. tax)</b>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; text-align:left;">
+                                                                        <b>Commission</b>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr t-foreach="commission_total" t-as="com">
+                                                                    <td style="border: 1px solid;width: 25%; text-align:left;">
+                                                                        <t t-out="com['move_id']['name']"/>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; text-align:left;">
+                                                                        <t t-out="com['move_id']['partner_id']['name']"/>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; text-align:left;">
+                                                                        <t t-out="format_amount(com['move_id']['amount_untaxed'], com['currency_id'])"/>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; text-align:left;">
+                                                                        <t t-out="format_amount(com['amount'], com['currency_id'])"/>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="3"
+                                                                        style="border: 1px solid;width: 80%; text-align:right;">
+                                                                        <b>Total Paid Amount</b>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 20%; text-align:left;">
+                                                                        <b>
+                                                                            <t t-out="format_amount(sum_total_commission, com['currency_id'])"/>
+                                                                        </b>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <br/>
+                                                            <br/>
+                                                            <div>You can view your invoices and past payouts from the
+                                                                link below:
+                                                            </div>
+                                                            <a t-att-href="'/web#view_type=list&amp;model=commission&amp;id=%s&amp;action=ehcs_commission.action_commission' % object.id"
+                                                               target="_blank" class="btn btn-secondary"
+                                                            >
+                                                                <b>Odoo.elsner.com</b>
+                                                            </a>
+                                                            <div>We are always available in case you have any issues or
+                                                                need support just email us at
+                                                            </div>
+                                                            <b>support@elsner.com</b>
+                                                            <br/>
+                                                            <br/>
+
+                                                            Yours Thankfully,
+                                                        </p>
+                                                        <br/>
+                                                        Elsner Technologies Pvt. Ltd.
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- FOOTER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="left">
+                                                    Elsner Technologies Pvt. Ltd.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="middle" align="left" style="opacity: 0.7;">
+                                                    +1 (607) 524-4040
+                                                        |
+                                                        sales@elsner.com
+                                                        |
+                                                        https://www.elsner.com
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </field>
+    </record>
+
+    <record id="commission_payout_release_admin_mail_template" model="mail.template">
+        <field name="name">Commission Admin: Payouts</field>
+        <field name="model_id" ref="model_commission_payment"/>
+        <field name="subject">Payout {{object.name}} for {{ ctx.get('mail_subject') }}</field>
+        <field name="body_html" type="html">
+            <table border="0" cellpadding="0" cellspacing="0"
+                   style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                <tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                               style="padding: 16px; background-color: #FFFFFF; color: #454748; border-collapse:separate;">
+                            <tbody>
+                                <!-- HEADER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="right">
+                                                    <img t-attf-src="/logo.png?company={{ object.company_id.id }}"
+                                                         style="padding: 0px; margin: 0px; height: auto; width: 80px;"
+                                                         t-att-alt="object.company_id.name"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- CONTENT -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="top" style="font-size: 13px;">
+                                                    <div>
+                                                        <p>
+                                                            Dear Elsner,
+                                                            <br/>
+                                                            <br/>
+                                                            <div>We have released the following payment to partner <t t-out="object.partner_user_id.name or ''"/>
+                                                                for <t t-out="ctx.get('mail_subject')"/>:
+                                                            </div>
+                                                            <br/>
+                                                            <t t-set="commission_total"
+                                                               t-value="ctx.get('commissions')"/>
+                                                            <t t-set="sum_total_commission"
+                                                               t-value="sum(commission_total.mapped('amount'))"/>
+                                                            <table style="border: 1px solid;width: 100%;text-align:center;border-collapse: collapse;">
+                                                                <tr>
+                                                                    <td style="border: 1px solid;width: 25%; text-align:left;">
+                                                                        <b>Invoice</b>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; text-align:left;">
+                                                                        <b>Customer Name</b>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; text-align:left;">
+                                                                        <b>Invoice Total (excl. tax)</b>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; text-align:left;">
+                                                                        <b>Commission</b>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr t-foreach="commission_total" t-as="com">
+                                                                    <td style="border: 1px solid;width: 25%; text-align:left;">
+                                                                        <t t-out="com['move_id']['name']"/>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; text-align:left;">
+                                                                        <t t-out="com['move_id']['partner_id']['name']"/>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; text-align:left;">
+                                                                        <t t-out="format_amount(com['move_id']['amount_untaxed'], com['currency_id'])"/>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 25%; text-align:left;">
+                                                                        <t t-out="format_amount(com['amount'], com['currency_id'])"/>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="3"
+                                                                        style="border: 1px solid;width: 80%; text-align:right;">
+                                                                        <b>Total Paid Amount</b>
+                                                                    </td>
+                                                                    <td style="border: 1px solid;width: 20%; text-align:left;">
+                                                                        <b>
+                                                                            <t t-out="format_amount(sum_total_commission, com['currency_id'])"/>
+                                                                        </b>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <br/>
+                                                            <br/>
+                                                            <div>You can view your invoices and past payouts from the
+                                                                link below:
+                                                            </div>
+                                                            <a t-att-href="'/web#view_type=form&amp;model=commission&amp;id=%s&amp;action=ehcs_commission.action_commission' % object.id"
+                                                               target="_blank" class="btn btn-secondary"
+                                                            >
+                                                                <b>Odoo.elsner.com</b>
+                                                            </a>
+                                                            <br/>
+
+
+                                                            Yours Thankfully,
+                                                        </p>
+                                                        <br/>
+                                                        Elsner Technologies Pvt. Ltd.
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- FOOTER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="left">
+                                                    Elsner Technologies Pvt. Ltd.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="middle" align="left" style="opacity: 0.7;">
+                                                    +1 (607) 524-4040
+                                                        |
+                                                        sales@elsner.com
+                                                        |
+                                                        https://www.elsner.com
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </field>
+    </record>
+
+    <record id="mail_template_creation_partner_user" model="mail.template">
+        <field name="name">User: New partner create</field>
+        <field name="model_id" ref="base.model_res_users"/>
+        <field name="subject">Join our Elsner Partner Portal</field>
+        <field name="body_html" type="html">
+            <table border="0" cellpadding="0" cellspacing="0"
+                   style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                <tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                               style="padding: 16px; background-color: #FFFFFF; color: #454748; border-collapse:separate;">
+                            <tbody>
+                                <!-- HEADER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle">
+                                                    <span style="font-size: 10px;">Welcome to Odoo</span>
+                                                    <br/>
+                                                    <span style="font-size: 20px; font-weight: bold;">
+                                                        <t t-out="object.name or ''"/>
+                                                    </span>
+                                                </td>
+                                                <td valign="middle" align="right">
+                                                    <img t-attf-src="/logo.png?company={{ object.company_id.id }}"
+                                                         style="padding: 0px; margin: 0px; height: auto; width: 80px;"
+                                                         t-att-alt="object.company_id.name"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- CONTENT -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="top" style="font-size: 13px;">
+                                                    <div>
+                                                        Dear <t t-out="object.firstname or ''"></t>,
+                                                        <br/>
+                                                        <br/>
+                                                        Greetings of the day.
+                                                        <br/>
+                                                        <br/>
+                                                        Lets begin this journey on a good note and ensure smooth
+                                                        transition to meet our goals together. You have been
+                                                        invited by
+                                                        <b>
+                                                            <t t-out="object.company_id.name or ''"/>
+                                                        </b>
+                                                        to connect on Partner Portal. This will give you access to
+                                                        view leads,
+                                                        invoices, and commissions from a single source.
+                                                        <div style="margin: 16px 0px 16px 0px;">
+                                                            <a t-att-href="object.signup_url"
+                                                               style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                                                Accept invitation
+                                                            </a>
+                                                        </div>
+                                                        <t t-set="website_url" t-value="object.get_base_url()"></t>
+                                                        Portal URL:
+                                                        <b>
+                                                            <a t-att-href='website_url' t-out="website_url or ''"></a>
+                                                        </b>
+                                                        <br/>
+                                                        Your sign in email is:
+                                                        <b>
+                                                            <a t-attf-href="/web/login?login={{ object.email }}"
+                                                               target="_blank" t-out="object.email or ''"></a>
+                                                        </b>
+                                                        <br/>
+                                                        <br/>
+                                                        <span style="color: green;">To learn more about our Partner Portal, please read our</span>
+                                                        <a href="https://docs.google.com/document/d/1x9rMkg1YFpPbUTAV1QJQkFvvSeUJOlTH9aciSvFP7cQ/edit?usp=sharing"
+                                                               target="_blank" class="btn btn-secondary"
+                                                        >manual</a>.
+
+                                                        <br/><br/>
+                                                        <div>We are looking forward to <span style="color: green;">have</span> a long-term partnership with
+                                                            you!
+                                                        </div>
+                                                        <br/>
+                                                        <br/>
+                                                        <div>
+                                                            Yours Thankfully,
+                                                            <br/>
+                                                            <t t-out="object.company_id.name or ''"/>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- FOOTER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="left">
+                                                    <t t-out="object.company_id.name or ''"></t>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="middle" align="left" style="opacity: 0.7;">
+                                                    <t t-out="object.company_id.phone or ''"></t>
+                                                    <t t-if="object.company_id.email">
+                                                        |
+                                                        <a t-att-href="'mailto:%s' % object.company_id.email"
+                                                           style="text-decoration:none; color: #454748;"
+                                                           t-out="object.company_id.email or ''"></a>
+                                                    </t>
+                                                    <t t-if="object.company_id.website">
+                                                        |
+                                                        <a t-att-href="'%s' % object.company_id.website"
+                                                           style="text-decoration:none; color: #454748;"
+                                                           t-out="object.company_id.website or ''"></a>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </field>
+    </record>
+
+    <record id="mail_template_creation_crm_lead_stage" model="mail.template">
+        <field name="name">Lead: Lead Change</field>
+        <field name="model_id" ref="crm.model_crm_lead"/>
+        <field name="subject">Your lead stage is changed to {{ctx.get('state')}}</field>
+        <field name="email_to">{{ object.partner_user_id.email }}</field>
+        <field name="body_html" type="html">
+            <table border="0" cellpadding="0" cellspacing="0"
+                   style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                <tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                               style="padding: 16px; background-color: #FFFFFF; color: #454748; border-collapse:separate;">
+                            <tbody>
+                                <!-- HEADER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="right">
+                                                    <img t-attf-src="/logo.png?company={{ object.company_id.id }}"
+                                                         style="padding: 0px; margin: 0px; height: auto; width: 80px;"
+                                                         t-att-alt="object.company_id.name"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- CONTENT -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="top" style="font-size: 13px;">
+                                                    <div>
+                                                        <p>Dear <t t-out="object.partner_user_id.name"/>,
+                                                            <br/>
+                                                            <br/>
+                                                            Greetings of the day.
+
+                                                            <t t-if="object.stage_id.name == 'Won'">
+                                                                “Congratulations! ”
+                                                            </t>
+                                                            <br/>
+                                                            <br/>
+                                                            Your lead
+                                                            <t t-out="object.name"/>
+                                                            stage has been changed to <b><t t-out="object.stage_id.name"/></b>.
+                                                            <br/>
+                                                             <t t-if="object.stage_id.name != 'Contact in Future' and object.stage_id.name != 'Lost'">
+                                                            We will notify you once the invoice is generated.
+                                                            </t>
+                                                            <br/>
+                                                            <t t-if="object.stage_id.name == 'Lost'">
+                                                                <t t-if="object.lost_reason_id">Lost Reason:
+                                                                    <t t-out="object.lost_reason_id.name"/>
+                                                                </t>
+                                                                <br/>
+                                                                <t t-raw="object.lost_feedback"/>
+                                                            </t>
+                                                            <div>You can view your invoices and current status from the
+                                                                link below:
+                                                            </div>
+                                                            <a t-att-href="'/web#view_type=form&amp;model=crm.lead&amp;id=%s&amp;action=crm.crm_lead_action_pipeline' % object.id"
+                                                               target="_blank" class="btn btn-secondary"
+                                                            >
+                                                                <b>Odoo.elsner.com</b>
+                                                            </a>
+                                                            <div>We are always available in case you have any issues or
+                                                                need support.
+                                                            </div>
+                                                            <br/>
+                                                            <br/>
+
+                                                            Yours Thankfully,
+                                                            <br/>
+                                                            Elsner Technologies Pvt. Ltd.
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- FOOTER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="left">
+                                                    Elsner Technologies Pvt. Ltd.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="middle" align="left" style="opacity: 0.7;">
+                                                    +1 (607) 524-4040
+                                                        |
+                                                        sales@elsner.com
+                                                        |
+                                                        https://www.elsner.com
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </field>
+    </record>
+
+    <record id="mail_template_creation_crm_lead" model="mail.template">
+        <field name="name">Lead: New Lead Generated</field>
+        <field name="model_id" ref="crm.model_crm_lead"/>
+        <field name="subject">New Lead Generated: {{ object.partner_user_id.name }}</field>
+        <field name="body_html" type="html">
+            <table border="0" cellpadding="0" cellspacing="0"
+                   style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                <tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                               style="padding: 16px; background-color: #FFFFFF; color: #454748; border-collapse:separate;">
+                            <tbody>
+                                <!-- HEADER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="right">
+                                                    <img t-attf-src="/logo.png?company={{ object.company_id.id }}"
+                                                         style="padding: 0px; margin: 0px; height: auto; width: 80px;"
+                                                         t-att-alt="object.company_id.name"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- CONTENT -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="top" style="font-size: 13px;">
+                                                    <div>
+                                                        <p>Hello Elsner,
+                                                            <br/>
+                                                            <br/>
+                                                            Congratulations! A new lead is created by <t
+                                                                    t-out="object.partner_user_id.name"/>!
+                                                        </p>
+                                                        <br/>
+                                                        <div>
+                                                            Name:
+                                                            <t t-out="object.contact_name"/>
+                                                            <br/>
+                                                            Email:
+                                                            <t t-out="object.email_from"/>
+                                                            <br/>
+                                                            Phone:
+                                                            <t t-out="object.phone"/>
+                                                        </div>
+                                                        <br/>
+                                                        Yours Thankfully,
+                                                        <br/>
+                                                        Elsner Technologies Pvt. Ltd.
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- FOOTER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                           <tr>
+                                                <td valign="middle" align="left">
+                                                    Elsner Technologies Pvt. Ltd.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="middle" align="left" style="opacity: 0.7;">
+                                                    +1 (607) 524-4040
+                                                        |
+                                                        sales@elsner.com
+                                                        |
+                                                        https://www.elsner.com
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </field>
+    </record>
+
+    <record id="mail_template_creation_crm_lead_user" model="mail.template">
+        <field name="name">Lead: New Lead Generated from User Partner</field>
+        <field name="model_id" ref="crm.model_crm_lead"/>
+        <field name="subject">Appreciation for bringing a New Lead</field>
+        <field name="email_to">{{ object.partner_user_id.email }}</field>
+        <field name="body_html" type="html">
+            <table border="0" cellpadding="0" cellspacing="0"
+                   style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                <tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                               style="padding: 16px; background-color: #FFFFFF; color: #454748; border-collapse:separate;">
+                            <tbody>
+                                <!-- HEADER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="right">
+                                                    <img t-attf-src="/logo.png?company={{ object.company_id.id }}"
+                                                         style="padding: 0px; margin: 0px; height: auto; width: 80px;"
+                                                         t-att-alt="object.company_id.name"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- CONTENT -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="top" style="font-size: 13px;">
+                                                    <div>
+                                                        <p>Dear <t t-out="object.partner_user_id.name"/>,
+                                                            <br/>
+                                                            <div>Hope you are doing well.</div>
+                                                            <br/>
+                                                            <div>We are highly obliged by your efforts to bring in a new
+                                                                lead through Elsner Partner Portal.
+                                                                <br/>
+                                                                You can view your leads and current status from the link
+                                                                below:
+                                                            </div>
+                                                            <a t-att-href="'/web#view_type=form&amp;model=crm.lead&amp;id=%s&amp;action=crm.crm_lead_action_pipeline' % object.id"
+                                                               target="_blank" class="btn btn-secondary"
+                                                            >
+                                                                <b>Odoo.elsner.com</b>
+                                                            </a>
+                                                            <div>We are always available in case you have any issues or
+                                                                need support.
+                                                            </div>
+                                                            <br/>
+
+                                                            Yours Thankfully,
+
+                                                            <br/>
+                                                            Elsner Technologies Pvt. Ltd.
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- FOOTER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="left">
+                                                    Elsner Technologies Pvt. Ltd.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="middle" align="left" style="opacity: 0.7;">
+                                                    +1 (607) 524-4040
+                                                        |
+                                                        sales@elsner.com
+                                                        |
+                                                        https://www.elsner.com
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </field>
+    </record>
+
+    <record id="mail_template_paid_invoice" model="mail.template">
+        <field name="name">Paid Invoice Notification</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="subject">Invoice #{{object.name}} - Payment Confirmation</field>
+        <field name="email_to">{{ object.partner_id.email }}</field>
+        <field name="body_html" type="html">
+            <table border="0" cellpadding="0" cellspacing="0"
+                   style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                <tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                               style="padding: 16px; background-color: #FFFFFF; color: #454748; border-collapse:separate;">
+                            <tbody>
+                                <!-- HEADER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="right">
+                                                    <img t-attf-src="/logo.png?company={{ object.company_id.id }}"
+                                                         style="padding: 0px; margin: 0px; height: auto; width: 80px;"
+                                                         t-att-alt="object.company_id.name"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- CONTENT -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="top" style="font-size: 13px;">
+                                                    <div>
+                                                        <p>Hello <t t-out="object.partner_id.firstname"/>,
+                                                            <br/>
+                                                            <div>
+                                                                We are pleased to inform you that the Billing Department
+                                                                has successfully received your
+                                                                recent payment in respect of invoice <t
+                                                                    t-out="object.name"/>. This email serves as a
+                                                                confirmation for the same.
+                                                                We appreciate your timely action and thank you for
+                                                                choosing our services.
+                                                            </div>
+                                                            <br/>
+                                                            <div>Let us know in case any question.
+                                                            </div>
+                                                        </p>
+                                                        <br/>
+                                                            Yours Thankfully,
+                                                        <br/>
+                                                        Elsner Technologies Pvt. Ltd.
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- FOOTER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="left">
+                                                    Elsner Technologies Pvt. Ltd.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="middle" align="left" style="opacity: 0.7;">
+                                                    +1 (607) 524-4040
+                                                        |
+                                                        sales@elsner.com
+                                                        |
+                                                        https://www.elsner.com
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+<!--            <div>-->
+<!--                <p>Hello <t t-out="object.partner_id.firstname"/>,-->
+<!--                    <br/>-->
+<!--                    <div>-->
+<!--                        We are pleased to inform you that the Billing Department has successfully received your-->
+<!--                        recent payment in respect of invoice <t t-out="object.name"/>. This email serves as a confirmation for the same.-->
+<!--                        We appreciate your timely action and thank you for choosing our services.-->
+<!--                    </div>-->
+<!--                    <br/>-->
+<!--                    <div>Let us know in case any question.-->
+<!--                    </div>-->
+<!--                </p>-->
+<!--                <br/>-->
+<!--                Best wishes,<br/>-->
+<!--                Elsner Technologies-->
+<!--            </div>-->
+        </field>
+    </record>
+
+    <record id="mail_template_creation_account_move" model="mail.template">
+        <field name="name">Invoice: New Invoice is generated</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="subject">Your New Invoice {{ object.name }} is generated</field>
+        <field name="email_to">{{ object.partner_user_id.email }}</field>
+        <field name="body_html" type="html">
+            <table border="0" cellpadding="0" cellspacing="0"
+                   style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                <tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                               style="padding: 16px; background-color: #FFFFFF; color: #454748; border-collapse:separate;">
+                            <tbody>
+                                <!-- HEADER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="right">
+                                                    <img t-attf-src="/logo.png?company={{ object.company_id.id }}"
+                                                         style="padding: 0px; margin: 0px; height: auto; width: 80px;"
+                                                         t-att-alt="object.company_id.name"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- CONTENT -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="top" style="font-size: 13px;">
+                                                    <div>
+                                                        <p>Dear <t t-out="object.partner_user_id.name"/>,
+                                                            <br/>
+                                                            <div>Congratulations! New invoice has been created for <t
+                                                                    t-out="object.partner_id.name"/>.
+                                                            </div>
+                                                            <br/>
+                                                            <div>We will add this invoice commission in your payout once
+                                                                it’s paid by the customer.
+                                                            </div>
+                                                            <br/>
+
+                                                            <div>
+                                                                Invoice No:
+                                                                <t t-out="object.name"/>
+                                                                <br/>
+                                                                Customer Name:
+                                                                <t t-out="object.partner_id.name"/>
+                                                                <br/>
+                                                                Invoice Total Amount (excl. tax):
+                                                                <t t-out="format_amount(object.amount_untaxed, object.currency_id)"/>
+                                                            </div>
+                                                            <br/>
+                                                            <div>You can view your invoices and current status from the
+                                                                link below:
+                                                            </div>
+                                                            <a t-att-href="'/web#view_type=form&amp;model=account.move&amp;id=%s&amp;action=account.action_move_out_invoice_type' % object.id"
+                                                               target="_blank" class="btn btn-secondary"
+                                                            >
+                                                                <b>Odoo.elsner.com</b>
+                                                            </a>
+                                                            <div>We are always available in case you have any issues or
+                                                                need support.
+                                                            </div>
+                                                            <br/>
+
+                                                            Yours Thankfully,
+                                                        </p>
+                                                        <br/>
+                                                        Elsner Technologies Pvt. Ltd.
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- FOOTER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                               style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="left">
+                                                    Elsner Technologies Pvt. Ltd.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="middle" align="left" style="opacity: 0.7;">
+                                                    +1 (607) 524-4040
+                                                        |
+                                                        sales@elsner.com
+                                                        |
+                                                        https://www.elsner.com
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </field>
+    </record>
+
+</odoo>

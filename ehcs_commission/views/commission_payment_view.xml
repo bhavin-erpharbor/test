@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="commission_payment_form_view" model="ir.ui.view">
+        <field name="name">commission.payment.form.view</field>
+        <field name="model">commission.payment</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm" groups="sales_team.group_sale_manager" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_paid" type="object" string="Mark as Paid" groups="sales_team.group_sale_manager" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
+                    <button name="action_draft" type="object" string="Set to Draft" groups="sales_team.group_sale_manager"  attrs="{'invisible': [('state', 'in', ('draft', 'confirm', 'paid'))]}"/>
+                    <button name="action_cancel" type="object" string="Cancel" groups="sales_team.group_sale_manager" attrs="{'invisible': [('state', 'in', ('cancel'))]}"/>
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="partner_user_id"/>
+                        <field name="transaction_id"/>
+                        <field name="payment_date"/>
+                    </group>
+                    <notebook>
+                        <page string="Commissions" name="invoice_commission">
+                            <field name="commission_ids">
+                                <tree>
+                                    <field name="name" string="Commission Reference"/>
+                                    <field name="partner_id"/>
+                                    <field name="invoice_date"/>
+                                    <field name="currency_id"/>
+                                    <field name="invoice_amount"/>
+                                    <field name="amount"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="commission_payment_tree_view" model="ir.ui.view">
+        <field name="name">commission.payment.tree.view</field>
+        <field name="model">commission.payment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="partner_user_id"/>
+                <field name="payment_date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_commission_payment" model="ir.actions.act_window">
+        <field name="name">Payouts</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">commission.payment</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_main_commission_payment"
+              name="Payouts"
+              sequence="57"
+              groups="base.group_system,group_partner_user"
+    />
+
+    <menuitem id="main_sub_menu_payouts"
+              name="Payouts"
+              parent="menu_main_commission_payment"
+              action="action_commission_payment"
+              sequence="57"/>
+
+</odoo>

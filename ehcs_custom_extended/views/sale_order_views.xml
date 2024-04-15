@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="sale_order_project_type_form" model="ir.ui.view">
+        <field name="name">sale.order.project.type.form</field>
+        <field name="model">sale.order.project.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+		            <group>
+	                    <field name="name"/>
+	                </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sale_order_project_type_tree" model="ir.ui.view">
+        <field name="name">sale.order.project.type.tree</field>
+        <field name="model">sale.order.project.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="act_sale_order_project_type_view" model="ir.actions.act_window">
+        <field name="name">Project Type</field>
+        <field name="res_model">sale.order.project.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to add a Project Type.
+            </p><p>
+                Manage all Project Type details.
+            </p>
+        </field>
+    </record>
+
+    <record id="sale_order_stage_form" model="ir.ui.view">
+        <field name="name">sale.order.stage.form</field>
+        <field name="model">sale.stage</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+		            <group>
+	                    <field name="name"/>
+	                </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sale_order_stage_tree" model="ir.ui.view">
+        <field name="name">sale.order.stage.tree</field>
+        <field name="model">sale.stage</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="act_sale_order_stage_view" model="ir.actions.act_window">
+        <field name="name">Sale Stage</field>
+        <field name="res_model">sale.stage</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to add a Stage.
+            </p><p>
+                Manage all Stage details.
+            </p>
+        </field>
+    </record>
+
+     <record model="ir.ui.view" id="sale_order_view_inherit_form">
+        <field name="name">sale.order.form.view.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="team_member_id" options="{'no_quick_create': True, 'no_create_edit' : True,  'no_create':True}"/>
+                <field name="technology_id" options="{'no_quick_create': True, 'no_create_edit' : True,  'no_create':True}"/>
+                <field name="project_type_id" options="{'no_quick_create': True, 'no_create_edit' : True,  'no_create':True}"/>
+                <field name="stage_id" options="{'no_quick_create': True, 'no_create_edit' : True,  'no_create':True}"/>
+            </field>
+            <xpath expr="//group/group[2]/field[@name='payment_term_id']" position="after">
+                <field name="subject"/>
+                <field name="reason_cancel"/>
+            </xpath>
+            <field name="currency_id" position="attributes">
+                <attribute name="required">0</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="sale_order_view_inherit_search">
+        <field name="name">sale.order.search.view.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <field name="team_id" position="after">
+                <field name="team_member_id"/>
+            </field>
+            <filter name="order_month" position="after">
+                <filter name="ba" string="BA" context="{'group_by': 'team_member_id'}"/>
+            </filter>
+        </field>
+     </record>
+
+
+    <menuitem id="menu_elsner_sale_order_project_type_main"
+              name="Project Type"
+              action="act_sale_order_project_type_view"
+              parent="sale.menu_sale_config"
+              sequence="21"
+              />
+
+    <menuitem id="menu_elsner_sale_order_stage_main"
+              name="Sale Stage"
+              action="act_sale_order_stage_view"
+              parent="sale.menu_sale_config"
+              sequence="22"
+              />
+
+    <!-- Added BA Group on sales menu  -->
+    <record id="sale.menu_sale_quotations" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4, ref('sale_group_ba'))]"/>
+    </record>
+    <record id="sale.menu_sale_order" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4, ref('sale_group_ba'))]"/>
+    </record>
+    <record id="sale.res_partner_menu" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4, ref('sale_group_ba'))]"/>
+    </record>
+    <record id="sale.menu_sale_invoicing" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4, ref('sale_group_ba'))]"/>
+    </record>
+    <record id="sale.product_menu_catalog" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4, ref('sale_group_ba'))]"/>
+    </record>
+
+</odoo>

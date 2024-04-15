@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_erp_software_form" model="ir.ui.view">
+            <field name="name">view.erp.software.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='assistant']" position="after">
+                    <field name="crm"/>
+                    <field name="crm_name" attrs="{'invisible': [('crm', '!=', 'other')]}"/>
+                    <field name="erp"/>
+                    <field name="erp_name" attrs="{'invisible': [('erp', '!=', 'other')]}"/>
+                    <field name="email_marketing"/>
+                    <field name="email_marketing_name" attrs="{'invisible': [('email_marketing', '!=', 'other')]}"/>
+                    <field name="accounting_software"/>
+                    <field name="accounting_software_name" attrs="{'invisible': [('accounting_software', '!=', 'other')]}"/>
+                </xpath>
+            </field>
+        </record>
+</odoo>
+
+        

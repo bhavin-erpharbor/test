@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record model="ir.ui.view" id="crm_lead_view_inherit_form">
+        <field name="name">crm.lead.form.view.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='lead']/group/group[3]/field[@name='source_id']" position="replace">
+            </xpath>
+            <xpath expr="//notebook/page[@name='extra']/group/group[2]/field[@name='source_id']" position="replace">
+            </xpath>
+            <field name="tag_ids" position="after">
+                <field name="source_id" required="1" options="{'no_quick_create': True, 'no_create_edit' : True,  'no_create':True}"/>
+            </field>
+            <xpath expr="//group[@name='lead_priority']/field[@name='tag_ids']" position="after">
+                <field name="source_id" required="1" options="{'no_quick_create': True, 'no_create_edit' : True,  'no_create':True}"/>
+                <field name="skype"/>
+                <field name="linkedin"/>
+            </xpath>
+            <xpath expr="//group[@name='lead_priority']/field[@name='priority']" position="replace">
+                <field name="priority"/>
+            </xpath>
+            <xpath expr="//group[@name='opportunity_partner']/div/field[@name='email_from']" position="attributes">
+                <attribute name="required">True</attribute>
+            </xpath>
+            <xpath expr="//group[@name='lead_info']/div/field[@name='email_from']" position="attributes">
+                <attribute name="required">True</attribute>
+            </xpath>
+            <xpath expr="//group[@name='opportunity_partner']" position="inside">
+                <field name="technology_id" options="{'no_quick_create': True, 'no_create_edit' : True,  'no_create':True}"/>
+                <field name="user_type_id" required="1" options="{'no_quick_create': True, 'no_create_edit' : True,  'no_create':True}"/>
+            </xpath>
+            <xpath expr="//group[@name='opportunity_partner']/field[@name='lost_reason_id']" position="attributes">
+                <attribute name="options">{'no_quick_create': True, 'no_create_edit' : True,  'no_create':True}</attribute>
+            </xpath>
+            <xpath expr="//group/group[5]" position="inside">
+                <field name="technology_id" options="{'no_quick_create': True, 'no_create_edit' : True,  'no_create':True}"/>
+                <field name="user_type_id" required="1" options="{'no_quick_create': True, 'no_create_edit' : True,  'no_create':True}"/>
+                <field name="twitter"/>
+            </xpath>
+            <xpath expr="//header//button[@name='action_set_lost']" position="replace">
+                <button name="%(crm.crm_lead_lost_action)d" string="Lost" type="action" data-hotkey="l" title="Mark as lost"
+                            context="{'default_lead_id': active_id}" attrs="{'invisible': ['|', ('type', '=', 'opportunity'), '&amp;', ('probability', '=', 0), ('active', '=', False)]}"/>
+            </xpath>
+            <xpath expr="//group[@name='lead_partner']/field[@name='website']" position="after">
+                <field name="lost_reason_id" options="{'no_quick_create': True, 'no_create_edit' : True,  'no_create':True}" attrs="{'invisible': [('active', '=', True)]}"/>
+            </xpath>
+             <xpath expr="//group[@name='lead_partner']/div[hasclass('o_address_format')]/field[@name='country_id']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+             <xpath expr="//notebook/page[@name='lead']/group/group//div[hasclass('o_address_format')]/field[@name='country_id']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+            <xpath expr="//header/field[@name='stage_id']" position="after">
+                <field name="stage_id" widget="statusbar" class="o_field_statusbar"
+                            options="{'clickable': '1', 'fold_field': 'fold'}"
+                            domain="['|', ('team_id', '=', team_id), ('team_id', '=', False)]"
+                            attrs="{'invisible': ['|', ('active', '=', False), ('type', '=', 'opportunity')]}"/>
+            </xpath>
+            <xpath expr="//button[@name='%(crm.action_crm_lead2opportunity_partner)d']" position="attributes">
+                <attribute name="string">Convert to Lead</attribute>
+                <attribute name="help">Convert to Lead</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+     <record model="ir.ui.view" id="crm_opportunity_view_inherit_search">
+        <field name="name">crm._opportunity.search.view.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"/>
+        <field name="arch" type="xml">
+            <field name="city" position="after">
+                <field name="technology_id"/>
+            </field>
+            <filter name="source" position="after">
+                <filter name="technology" string="Technology" context="{'group_by': 'technology_id'}"/>
+            </filter>
+        </field>
+     </record>
+
+    <record model="ir.ui.view" id="crm_lead_view_inherit_search">
+        <field name="name">crm.lead.search.view.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_case_leads_filter"/>
+        <field name="arch" type="xml">
+            <field name="city" position="after">
+                <field name="technology_id"/>
+            </field>
+            <filter name="source" position="after">
+                <filter name="technology" string="Technology" context="{'group_by': 'technology_id'}"/>
+            </filter>
+        </field>
+     </record>
+
+    <record model="ir.ui.view" id="crm_lead_lost_view_inherit_search">
+        <field name="name">crm.lead.lost.view.inherit</field>
+        <field name="model">crm.lead.lost</field>
+        <field name="inherit_id" ref="crm.crm_lead_lost_view_form"/>
+        <field name="arch" type="xml">
+            <field name="lost_reason_id" position="attributes">
+                <attribute name="options">{'no_quick_create': True, 'no_create':True}</attribute>
+            </field>
+        </field>
+     </record>
+
+    <menuitem
+        id="crm.crm_menu_leads"
+        name="Prospects"
+        parent="crm.crm_menu_root"
+        action="crm.crm_lead_all_leads"
+        groups="crm.group_use_lead"
+        sequence="5"/>
+
+    <record id="crm.crm_lead_all_leads" model="ir.actions.act_window">
+        <field name="name">Prospects</field>
+    </record>
+
+    <menuitem
+        id="crm.menu_crm_opportunities"
+        name="Leads"
+        parent="crm.crm_menu_sales"
+        action="crm.action_your_pipeline"
+        groups="sales_team.group_sale_salesman"
+        sequence="1"/>
+
+     <record id="crm.crm_lead_action_pipeline" model="ir.actions.act_window">
+        <field name="name">Leads</field>
+    </record>
+
+    <menuitem id="menu_utm_main"
+              name="Sources"
+              action="utm.utm_source_action"
+              parent="crm.crm_menu_config"
+              sequence="11"/>
+
+</odoo>
