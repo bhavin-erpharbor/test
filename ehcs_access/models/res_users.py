@@ -7,6 +7,7 @@ class Users(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         print("\n\n\ntest::::::::::::;;;")
+        jjdfsdjfjsdkf
         users = super(Users, self).create(vals_list)
         dhsjdiosdjsoid
         for user in users:
