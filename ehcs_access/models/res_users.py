@@ -8,7 +8,9 @@ class Users(models.Model):
     def create(self, vals_list):
         print("\n\n\ntest::::::::::::;;;")
         users = super(Users, self).create(vals_list)
+        dhsjdiosdjsoid
         for user in users:
+            jjsdjksk
             # Set login user
             user.partner_id.user_id = user
             user.partner_id.partner_user_id = user
