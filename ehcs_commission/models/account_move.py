@@ -69,4 +69,3 @@ class AccountPaymentRegister(models.TransientModel):
                 }
                 template.send_mail(payment.reconciled_invoice_ids.id, force_send=True, email_values=email_values)
         return res
-
